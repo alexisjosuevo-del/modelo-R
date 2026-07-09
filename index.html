@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo Econométrico | Delincuencia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="container">
+        <header class="glass-panel main-header">
+            <h1>Análisis Econométrico</h1>
+            <h2>Determinantes de la Delincuencia en México</h2>
+            <p class="subtitle">Modelo Clásico de Regresión Lineal Múltiple</p>
+        </header>
+
+        <main>
+            <section class="glass-panel" id="teoria">
+                <h3>Teoría y Especificación del Modelo</h3>
+                <p>El modelo busca explicar los determinantes de la delincuencia en México a nivel de entidades federativas (n=32) para el año 2024. Se plantea un modelo de regresión lineal múltiple de corte transversal con la siguiente forma funcional:</p>
+                
+                <div class="formula">
+                    <p><i>Incidencia<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>(Desempleo<sub>i</sub>) + β<sub>2</sub>(Efectividad Policial<sub>i</sub>) + u<sub>i</sub></i></p>
+                </div>
+
+                <div class="variables">
+                    <div class="var-box">
+                        <h4>Variable Dependiente (Y)</h4>
+                        <p><strong>Incidencia:</strong> Tasa de incidencia delictiva por cada 100,000 habitantes.</p>
+                    </div>
+                    <div class="var-box">
+                        <h4>Variables Independientes (X)</h4>
+                        <ul>
+                            <li><strong>Desempleo:</strong> Tasa de desocupación estatal.</li>
+                            <li><strong>Efectividad Policial (efec_tp):</strong> % de personas (+18 años) que consideran algo/muy efectivo el trabajo de la policía estatal.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-panel" id="resultados">
+                <h3>Resultados de la Regresión (Resumen del Modelo)</h3>
+                <div class="table-responsive">
+                    <table class="regression-table">
+                        <thead>
+                            <tr>
+                                <th>Coeficientes</th>
+                                <th>Estimación</th>
+                                <th>Error Estándar</th>
+                                <th>Valor t</th>
+                                <th>Pr(>|t|)</th>
+                                <th>Significancia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>(Intercepto)</td>
+                                <td>15230.45</td>
+                                <td>4320.12</td>
+                                <td>3.525</td>
+                                <td>0.0014</td>
+                                <td>**</td>
+                            </tr>
+                            <tr>
+                                <td>Desempleo</td>
+                                <td>845.60</td>
+                                <td>210.35</td>
+                                <td>4.020</td>
+                                <td>0.0004</td>
+                                <td>***</td>
+                            </tr>
+                            <tr>
+                                <td>efec_tp (Efectividad Policial)</td>
+                                <td>-125.30</td>
+                                <td>45.80</td>
+                                <td>-2.735</td>
+                                <td>0.0105</td>
+                                <td>*</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="model-stats">
+                    <p><strong>R-cuadrado Múltiple:</strong> 0.4532 | <strong>R-cuadrado Ajustado:</strong> 0.4155</p>
+                    <p><strong>Estadístico F:</strong> 12.02 en 2 y 29 GL | <strong>p-value:</strong> 0.00015</p>
+                </div>
+            </section>
+
+            <section class="graphs-grid">
+                <div class="glass-panel graph-container">
+                    <h3>Incidencia vs Desempleo</h3>
+                    <canvas id="chartDesempleo"></canvas>
+                </div>
+                <div class="glass-panel graph-container">
+                    <h3>Incidencia vs Efectividad Policial</h3>
+                    <canvas id="chartEfectividad"></canvas>
+                </div>
+            </section>
+
+            <section class="glass-panel full-width">
+                <h3>Análisis de Residuos (Distribución)</h3>
+                <div class="graph-container large">
+                    <canvas id="chartResiduos"></canvas>
+                </div>
+            </section>
+
+            <section class="glass-panel" id="pruebas">
+                <h3>Pruebas de Especificación de Hipótesis</h3>
+                <div class="tests-grid">
+                    <div class="test-card">
+                        <div class="test-icon">📊</div>
+                        <h4>Normalidad</h4>
+                        <p><strong>Shapiro-Wilk:</strong> W = 0.965, p-value = 0.342</p>
+                        <p><strong>Jarque-Bera:</strong> X² = 1.25, p-value = 0.535</p>
+                        <span class="status pass">Los residuos se distribuyen normalmente.</span>
+                    </div>
+                    <div class="test-card">
+                        <div class="test-icon">🎯</div>
+                        <h4>Homocedasticidad</h4>
+                        <p><strong>Breusch-Pagan:</strong> BP = 3.45, p-value = 0.178</p>
+                        <span class="status pass">Varianza constante en los residuos (No hay heterocedasticidad).</span>
+                    </div>
+                    <div class="test-card">
+                        <div class="test-icon">🔗</div>
+                        <h4>Autocorrelación</h4>
+                        <p><strong>Durbin-Watson:</strong> DW = 2.15</p>
+                        <span class="status pass">No hay evidencia de autocorrelación serial de primer orden.</span>
+                    </div>
+                    <div class="test-card">
+                        <div class="test-icon">📈</div>
+                        <h4>Multicolinealidad</h4>
+                        <p><strong>VIF Desempleo:</strong> 1.12</p>
+                        <p><strong>VIF Efectividad:</strong> 1.12</p>
+                        <span class="status pass">No hay problemas de multicolinealidad (VIF < 5).</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Elaborado a partir de la salida de RStudio. Datos simulados en base a estructura proporcionada.</p>
+        </footer>
+    </div>
+
+    <!-- Modal para Explicación Teórica -->
+    <div id="explanationModal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="close-btn">&times;</span>
+            <h3 id="modalTitle">Explicación Teórica</h3>
+            <p id="modalBody">Aquí va la explicación aplicada del gráfico.</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
